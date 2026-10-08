@@ -59,23 +59,19 @@ export default function HistoryPage() {
 
   if (!isSignedIn) {
     return (
-      <div className="p-8 mx-auto max-w-3xl">
-        <div className="flex items-center gap-3">
-          <MessageSquare className="h-6 w-6 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">History</h1>
-        </div>
-        <p className="mt-3 text-muted-foreground">Please sign in to view your chat history.</p>
+      <div className="page-width min-h-[calc(100dvh-4rem)] py-12">
+        <p className="section-label">Notes</p>
+        <h1 className="page-heading mt-3">Past readings</h1>
+        <p className="mt-3 text-muted-foreground">Please sign in to view your notes.</p>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="p-8 mx-auto max-w-3xl">
-        <div className="flex items-center gap-3">
-          <MessageSquare className="h-6 w-6 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">History</h1>
-        </div>
+      <div className="page-width min-h-[calc(100dvh-4rem)] py-12">
+        <p className="section-label">Notes</p>
+        <h1 className="page-heading mt-3">Past readings</h1>
         <div className="mt-6 flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
@@ -84,11 +80,9 @@ export default function HistoryPage() {
   }
   if (error) {
     return (
-      <div className="p-8 mx-auto max-w-3xl">
-        <div className="flex items-center gap-3">
-          <MessageSquare className="h-6 w-6 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">History</h1>
-        </div>
+      <div className="page-width min-h-[calc(100dvh-4rem)] max-w-4xl py-12">
+        <p className="section-label">Notes</p>
+        <h1 className="page-heading mt-3">Past readings</h1>
         <div className="mt-6 rounded-lg border bg-background">
           <div className="p-6">
             <p className="text-sm text-red-600">Failed to load history.</p>
@@ -107,12 +101,10 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="p-8 mx-auto max-w-4xl">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <MessageSquare className="h-6 w-6 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">Your Chat History</h1>
-        </div>
+    <div className="page-width min-h-[calc(100dvh-4rem)] max-w-4xl py-12">
+      <p className="section-label">Notes</p>
+      <div className="mt-3 flex items-center justify-between gap-3">
+        <h1 className="page-heading">Past readings</h1>
         {data && data.length > 0 && (
           <ExportButton data={data} />
         )}
@@ -122,7 +114,7 @@ export default function HistoryPage() {
         <div className="mt-8 rounded-lg border bg-background">
           <div className="p-8 text-center">
             <MessageSquare className="mx-auto h-10 w-10 text-muted-foreground" />
-            <h2 className="mt-4 text-lg font-semibold">No chats yet</h2>
+              <h2 className="mt-4 text-lg font-semibold">No conversations yet</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Your recent conversations will appear here.
             </p>
@@ -158,6 +150,7 @@ export default function HistoryPage() {
                       variant="destructive"
                       size="sm"
                       className="h-8 w-8 p-0"
+                      aria-label={`Delete conversation: ${row.question}`}
                     >
                       {deleting === row.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />

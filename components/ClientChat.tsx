@@ -57,7 +57,7 @@ export default function ClientChat({ initialQuestion, initialAnswer }: { initial
     <>
       <div className="flex-1 overflow-y-auto space-y-4 pb-6">
         {messages.length === 0 && (
-          <div className="text-center text-neutral-500 mt-10">This conversation is empty. Ask the first question.</div>
+          <div className="mt-10 text-center text-muted-foreground">This conversation is empty. Ask the first question.</div>
         )}
 
         {messages.map((m, idx) => (
@@ -65,13 +65,13 @@ export default function ClientChat({ initialQuestion, initialAnswer }: { initial
             <div
               className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${
                 m.role === 'user'
-                  ? 'bg-blue-600 text-white rounded-br-sm'
-                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-bl-sm'
+                  ? 'bg-primary text-primary-foreground rounded-br-sm'
+                  : 'bg-card border border-border text-card-foreground rounded-bl-sm'
               }`}
             >
               <div className="whitespace-pre-wrap leading-relaxed">{m.content}</div>
               {m.role === 'assistant' && m.sources && m.sources.length > 0 && (
-                <div className="mt-3 border-t border-neutral-200 dark:border-neutral-700 pt-2 text-xs opacity-80">
+                <div className="mt-3 border-t border-border pt-2 text-xs text-muted-foreground">
                   <div className="font-medium mb-1">Sources</div>
                   <ul className="list-disc ml-5">
                     {m.sources.map((s, i) => (
@@ -89,7 +89,7 @@ export default function ClientChat({ initialQuestion, initialAnswer }: { initial
 
         {sending && (
           <div className="w-full flex justify-start">
-            <div className="max-w-[85%] rounded-2xl px-4 py-3 text-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-bl-sm">
+            <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-border bg-card px-4 py-3 text-sm text-card-foreground">
               <span className="opacity-70">Thinking…</span>
             </div>
           </div>
@@ -98,21 +98,21 @@ export default function ClientChat({ initialQuestion, initialAnswer }: { initial
         <div ref={bottomRef} />
       </div>
 
-      <div className="sticky bottom-0 pb-4 bg-white/70 dark:bg-neutral-950/70 backdrop-blur z-10">
-        <div className="border rounded-xl p-2 bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800">
+      <div className="sticky bottom-0 z-10 bg-background/90 pb-4 backdrop-blur">
+        <div className="rounded-xl border border-border bg-card p-2">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Write your question…"
             rows={1}
-            className="w-full resize-none outline-none bg-transparent p-2 text-sm"
+            className="w-full resize-none bg-transparent p-2 text-sm focus-visible:ring-0"
           />
           <div className="flex justify-end">
             <button
               onClick={sendMessage}
               disabled={sending || !input.trim()}
-              className="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm disabled:opacity-50"
+              className="rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
             >
               {sending ? 'Sending…' : 'Send'}
             </button>
@@ -122,5 +122,3 @@ export default function ClientChat({ initialQuestion, initialAnswer }: { initial
     </>
   );
 }
-
-

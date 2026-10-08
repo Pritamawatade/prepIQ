@@ -128,8 +128,8 @@ export const SkeletonOne = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
-      <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
+      <div className="absolute bottom-0 z-40 inset-x-0 h-16 border-t bg-background/80 backdrop-blur w-full pointer-events-none" />
+      <div className="absolute top-0 z-40 inset-x-0 h-16 border-b bg-background/80 backdrop-blur w-full pointer-events-none" />
     </div>
   );
 };
@@ -227,8 +227,8 @@ export const SkeletonTwo = () => {
         ))}
       </div>
 
-      <div className="absolute left-0 z-[100] inset-y-0 w-20 bg-gradient-to-r from-white dark:from-black to-transparent  h-full pointer-events-none" />
-      <div className="absolute right-0 z-[100] inset-y-0 w-20 bg-gradient-to-l from-white dark:from-black  to-transparent h-full pointer-events-none" />
+      <div className="absolute left-0 z-[100] inset-y-0 w-10 border-r bg-background/80 backdrop-blur h-full pointer-events-none" />
+      <div className="absolute right-0 z-[100] inset-y-0 w-10 border-l bg-background/80 backdrop-blur h-full pointer-events-none" />
     </div>
   );
 };

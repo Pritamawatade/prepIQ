@@ -25,8 +25,8 @@ export default async function ChatByIdPage({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] max-w-3xl mx-auto px-4">
-      <div className="py-4 sticky top-0 bg-white/70 dark:bg-neutral-950/70 backdrop-blur z-10">
+    <div className="mx-auto flex h-[calc(100dvh-4rem)] max-w-3xl flex-col px-4">
+      <div className="sticky top-0 z-10 border-b border-border bg-background/90 py-4 backdrop-blur">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-primary" />
@@ -44,4 +44,3 @@ export default async function ChatByIdPage({ params }: PageProps) {
     </div>
   );
 }
-
