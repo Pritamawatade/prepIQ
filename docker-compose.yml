@@ -1,5 +1,20 @@
 services:
   qdrant:
-    image: qdrant/qdrant
+    # Pinned to match @qdrant/js-client-rest in package.json (^1.19.0);
+    # unpinned `latest` caused a client/server version-skew warning in verification.
+    image: qdrant/qdrant:v1.19.0
     ports:
       - 6333:6333
+      - 6334:6334
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --no-verbose --tries=1 --spider http://localhost:6333/ || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  qdrant_storage:

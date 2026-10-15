@@ -62,7 +62,8 @@ export async function groqChat(
   }
 }
 
-/** Chat completion forced into JSON. Strips code fences; throws on unparseable output. */
+/** Chat completion forced into JSON. Strips code fences; extracts the first
+ *  JSON object/array when the model adds commentary; throws on unparseable output. */
 export async function groqJson<T>(
   messages: ChatMsg[],
   opts: { model?: string; temperature?: number; maxTokens?: number } = {},
@@ -78,9 +79,28 @@ export async function groqJson<T>(
     ],
     { ...opts, temperature: opts.temperature ?? 0.1 },
   );
-  const cleaned = text
+  const withoutFences = text
     .replace(/^```(?:json)?\s*/i, '')
     .replace(/\s*```$/, '')
     .trim();
-  return JSON.parse(cleaned) as T;
+  // Fast path: whole response is JSON.
+  try {
+    return JSON.parse(withoutFences) as T;
+  } catch {
+    // Slow path: model wrapped JSON in prose — extract the largest {...} or [...].
+    const objStart = withoutFences.indexOf('{');
+    const objEnd = withoutFences.lastIndexOf('}');
+    const arrStart = withoutFences.indexOf('[');
+    const arrEnd = withoutFences.lastIndexOf(']');
+    const objSpan = objStart !== -1 && objEnd > objStart ? objEnd - objStart : -1;
+    const arrSpan = arrStart !== -1 && arrEnd > arrStart ? arrEnd - arrStart : -1;
+    const candidate =
+      objSpan >= arrSpan && objSpan > 0
+        ? withoutFences.slice(objStart, objEnd + 1)
+        : arrSpan > 0
+          ? withoutFences.slice(arrStart, arrEnd + 1)
+          : '';
+    if (!candidate) throw new SyntaxError(`No JSON found in model output: ${text.slice(0, 200)}`);
+    return JSON.parse(candidate) as T;
+  }
 }

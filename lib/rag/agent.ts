@@ -48,10 +48,23 @@ async function agentTurn(
     { model, temperature: 0.1, maxTokens: 400 },
   );
   const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
-  const parsed = JSON.parse(cleaned) as { tool: string; args: Record<string, any> };
-  if (!['search_docs', 'finish'].includes(parsed.tool)) {
-    throw new Error(`Unknown tool: ${parsed.tool}`);
+  let parsed: { tool: string; args: Record<string, any> };
+  try {
+    parsed = JSON.parse(cleaned) as { tool: string; args: Record<string, any> };
+  } catch {
+    // Model replied in prose — pull out the embedded {"tool": ...} object.
+    const start = cleaned.indexOf('{');
+    const end = cleaned.lastIndexOf('}');
+    if (start === -1 || end <= start) throw new Error('Agent turn returned no JSON tool call.');
+    parsed = JSON.parse(cleaned.slice(start, end + 1)) as {
+      tool: string;
+      args: Record<string, any>;
+    };
   }
+  if (!parsed || typeof parsed !== 'object' || !['search_docs', 'finish'].includes((parsed as any).tool)) {
+    throw new Error(`Unknown tool: ${(parsed as any)?.tool}`);
+  }
+  if (!parsed.args || typeof parsed.args !== 'object') parsed.args = {};
   return parsed;
 }
 

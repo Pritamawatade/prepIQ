@@ -12,6 +12,9 @@ export function qdrant(): QdrantClient {
     client = new QdrantClient({
       url: process.env.QDRANT_URL || 'http://localhost:6333',
       apiKey: process.env.QDRANT_API_KEY,
+      // Minor-version skew (e.g. server 1.13 vs client 1.19) is fine for the
+      // query/upsert APIs we use; don't hard-crash verification on it.
+      checkCompatibility: false,
     });
   }
   return client;
