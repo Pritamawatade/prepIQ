@@ -24,7 +24,7 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DocWise — A reading room for your documents",
+  title: "DocWise  A reading room for your documents",
   description: "Ask questions across your papers and trace every answer to its page.",
 };
 

@@ -91,7 +91,7 @@ const tabs = [
     icon: Table2,
     question: "Pull quarterly revenue into a table.",
     answer:
-      "Done — 4 quarters extracted below. Q4 leads at $68M. Ask me to chart it, or export the rows to CSV.",
+      "Done  4 quarters extracted below. Q4 leads at $68M. Ask me to chart it, or export the rows to CSV.",
     cite: "Annual report.xlsx, sheet Revenue",
   },
 ] as const;
@@ -100,7 +100,7 @@ const features = [
   {
     icon: ScanSearch,
     title: "Page-level citations",
-    body: "Every claim ships with file and page. Click the stamp and you land on the exact passage — no blind trust.",
+    body: "Every claim ships with file and page. Click the stamp and you land on the exact passage  no blind trust.",
     span: "md:col-span-2",
     visual: "cite" as const,
   },
@@ -121,7 +121,7 @@ const features = [
   {
     icon: Languages,
     title: "Reads scans and tables",
-    body: "PDFs, DOCX, and CSV — including exported sheets and messy real-world formatting.",
+    body: "PDFs, DOCX, and CSV  including exported sheets and messy real-world formatting.",
     span: "",
     visual: "none",
   },
@@ -145,7 +145,7 @@ const steps = [
   {
     n: "01",
     title: "Drop the pile",
-    body: "Drag in PDFs, DOCX, and CSVs — up to 10 files, 50 MB each. We paginate, chunk, and index while you watch the progress bar fill.",
+    body: "Drag in PDFs, DOCX, and CSVs  up to 10 files, 50 MB each. We paginate, chunk, and index while you watch the progress bar fill.",
     meta: "PDF · DOCX · CSV",
   },
   {
@@ -169,7 +169,7 @@ const personas = [
     role: "Investor, early-stage fund",
   },
   {
-    quote: "I fed it three years of field reports. It found the one paragraph where we promised the opposite — with the page attached.",
+    quote: "I fed it three years of field reports. It found the one paragraph where we promised the opposite  with the page attached.",
     name: "Daniel O.",
     role: "Policy researcher",
   },
@@ -183,7 +183,7 @@ const personas = [
 const faqs = [
   {
     q: "What files can I upload?",
-    a: "PDF, DOCX, and CSV — up to 10 files at once, 50 MB each. Scanned PDFs work; tables inside spreadsheets are parsed row by row.",
+    a: "PDF, DOCX, and CSV  up to 10 files at once, 50 MB each. Scanned PDFs work; tables inside spreadsheets are parsed row by row.",
   },
   {
     q: "Where do answers come from?",
@@ -191,7 +191,7 @@ const faqs = [
   },
   {
     q: "Can it make charts from my data?",
-    a: "Yes. When your question implies numbers — revenue by quarter, headcount by region — DocWise extracts the rows and renders a chart you can inspect and export.",
+    a: "Yes. When your question implies numbers  revenue by quarter, headcount by region  DocWise extracts the rows and renders a chart you can inspect and export.",
   },
   {
     q: "Is my data private?",
@@ -225,7 +225,7 @@ export default function Home() {
               className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground"
             >
               Drop in board packs, papers, and spreadsheets. Ask in plain words and get
-              a direct answer — with the file and page waiting in the margin so you
+              a direct answer  with the file and page waiting in the margin so you
               can verify before you quote.
             </motion.p>
             <motion.div
@@ -377,7 +377,7 @@ export default function Home() {
           <h2 className="font-display mt-4 text-3xl font-semibold md:text-4xl">One shelf, three kinds of questions</h2>
           <p className="mt-4 leading-7 text-muted-foreground">
             Summaries for the skim, comparisons for the audit, tables for the model.
-            Pick a tab — this is the actual rhythm of the reading room.
+            Pick a tab  this is the actual rhythm of the reading room.
           </p>
         </motion.div>
         <motion.div {...fadeUp} className="surface mt-8 overflow-hidden">
@@ -443,7 +443,7 @@ export default function Home() {
                   <p className="text-sm font-semibold">How the room found it</p>
                   <ol className="mt-3 space-y-3 text-sm leading-6 text-muted-foreground">
                     <li className="flex gap-3"><span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-primary">1</span> Retrieved 6 passages across 2 files, ranked by exact phrase overlap.</li>
-                    <li className="flex gap-3"><span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-primary">2</span> Drafted the answer only from those passages — nothing from memory.</li>
+                    <li className="flex gap-3"><span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-primary">2</span> Drafted the answer only from those passages  nothing from memory.</li>
                     <li className="flex gap-3"><span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-primary">3</span> Pinned the margin note so you can open page 8 yourself.</li>
                   </ol>
                   <div className="mt-5 rounded-xl border border-border bg-background p-4">
@@ -524,11 +524,11 @@ export default function Home() {
           <p className="mt-4 leading-7 text-muted-foreground">
             Ask “revenue by quarter” or “headcount by region” and DocWise pulls the
             rows, totals them where it should, and renders a chart you can hover,
-            question, and export. Below is live output from a sample annual report —
+            question, and export. Below is live output from a sample annual report 
             rendered in your current theme.
           </p>
           <ul className="mt-6 space-y-3 text-[0.95rem]">
-            {["Hover any bar for the exact figure and its source cell", "Ask a follow-up — “now as a share of total” — and it re-cuts", "Export the extracted rows to CSV in one click"].map((t) => (
+            {["Hover any bar for the exact figure and its source cell", "Ask a follow-up  “now as a share of total”  and it re-cuts", "Export the extracted rows to CSV in one click"].map((t) => (
               <li key={t} className="flex items-start gap-2.5">
                 <Check className="mt-1 size-4 shrink-0 text-primary" /> <span>{t}</span>
               </li>
@@ -618,7 +618,7 @@ export default function Home() {
                 <blockquote className="font-display mt-3 text-lg leading-7">“{p.quote}”</blockquote>
                 <figcaption className="mt-4 text-sm">
                   <span className="font-semibold">{p.name}</span>
-                  <span className="text-muted-foreground"> — {p.role}</span>
+                  <span className="text-muted-foreground">  {p.role}</span>
                 </figcaption>
               </figure>
             ))}
@@ -665,7 +665,7 @@ export default function Home() {
             </h2>
             <p className="mx-auto mt-4 max-w-xl leading-7 text-teal-50/80">
               Free to start. Upload your first report and ask your first real question
-              in under two minutes — citations included.
+              in under two minutes  citations included.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <SignedOut>
@@ -684,7 +684,7 @@ export default function Home() {
                 <Link href="/contact">Talk to us</Link>
               </Button>
             </div>
-            <p className="mt-6 text-xs text-teal-100/60">PDF · DOCX · CSV — no credit card, delete anytime</p>
+            <p className="mt-6 text-xs text-teal-100/60">PDF · DOCX · CSV  no credit card, delete anytime</p>
           </div>
         </motion.div>
       </section>

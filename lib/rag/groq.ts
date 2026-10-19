@@ -87,7 +87,7 @@ export async function groqJson<T>(
   try {
     return JSON.parse(withoutFences) as T;
   } catch {
-    // Slow path: model wrapped JSON in prose — extract the largest {...} or [...].
+    // Slow path: model wrapped JSON in prose  extract the largest {...} or [...].
     const objStart = withoutFences.indexOf('{');
     const objEnd = withoutFences.lastIndexOf('}');
     const arrStart = withoutFences.indexOf('[');

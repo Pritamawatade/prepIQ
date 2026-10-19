@@ -12,7 +12,7 @@ export interface ExpandedQuery {
   hyde: string; // hypothetical answer passage (HyDE)
 }
 
-/** Heuristic fallback when Groq is unreachable — pipeline keeps working. */
+/** Heuristic fallback when Groq is unreachable  pipeline keeps working. */
 export function heuristicExpand(question: string): ExpandedQuery {
   const q = question.trim();
   return {

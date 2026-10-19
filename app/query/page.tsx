@@ -82,7 +82,7 @@ function EmptyRoomArt({ className = "h-36 w-auto" }: { className?: string }) {
         <rect x="92" y="102" width="86" height="22" rx="7" fill="none" stroke="var(--glow)" strokeWidth="2" strokeDasharray="5 4" />
         <line x1="102" y1="113" x2="150" y2="113" stroke="var(--glow)" strokeWidth="4" strokeLinecap="round" />
       </g>
-      {/* magnifier with slow-rotating dashed ring — the one minimal animation */}
+      {/* magnifier with slow-rotating dashed ring  the one minimal animation */}
       <g>
         <circle cx="182" cy="52" r="26" fill="var(--card)" stroke="var(--border)" strokeWidth="2" />
         <circle cx="182" cy="52" r="31" fill="none" stroke="var(--glow)" strokeWidth="1.6" strokeDasharray="4 6" strokeLinecap="round" className="animate-spin-slower" />

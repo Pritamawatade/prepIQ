@@ -76,6 +76,6 @@ export function checkGrounding(
     const hit = toks.filter((t) => evidenceTokens.has(t)).length / toks.length;
     if (hit < 0.15 && !/couldn'?t find|no .*found|not in the/i.test(s)) weak++;
   }
-  if (weak >= 2) notes.push(`${weak} answer sentences share little vocabulary with the evidence — verify for hallucination.`);
+  if (weak >= 2) notes.push(`${weak} answer sentences share little vocabulary with the evidence  verify for hallucination.`);
   return { grounded: notes.length === 0, notes };
 }

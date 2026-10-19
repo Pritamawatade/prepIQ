@@ -47,7 +47,7 @@ export async function ingestMetadataId(metadataId: string, userId: string): Prom
     else if (ext === '.docx') docs = await new DocxLoader(localFile).load();
     else if (ext === '.csv') docs = await new CSVLoader(localFile).load();
     else if (ext === '.txt' || ext === '.md') {
-      // Plain text needs no loader — read directly.
+      // Plain text needs no loader  read directly.
       const text = await fs.readFile(localFile, 'utf-8');
       docs = [{ pageContent: text, metadata: {} } as Document];
     } else throw new Error(`Unsupported file type: ${ext}`);

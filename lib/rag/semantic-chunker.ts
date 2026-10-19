@@ -1,5 +1,5 @@
 // Semantic chunking: heading-aware, sentence-respecting, table-preserving.
-// Old code indexed whole PDF pages (or whole CSV rows) as one vector — high noise,
+// Old code indexed whole PDF pages (or whole CSV rows) as one vector  high noise,
 // low relevance. This splitter keeps one idea per chunk so cosine similarity means
 // something. LEARNING.md → "Semantic chunking".
 
@@ -31,7 +31,7 @@ function isTableRow(line: string): boolean {
   return /\|.*\|/.test(line) || /^\s*[-*]\s+.+:\s+.+/.test(line) || /,.*,.*,/.test(line);
 }
 
-/** Split raw text into semantic chunks. Pure function — easy to unit test. */
+/** Split raw text into semantic chunks. Pure function  easy to unit test. */
 export function semanticChunk(
   rawText: string,
   opts: { targetTokens?: number; overlapTokens?: number; minTokens?: number } = {},
@@ -68,7 +68,7 @@ export function semanticChunk(
   let charCursor = 0;
 
   for (const sec of sections) {
-    // Keep table-ish runs together — splitting a table across chunks kills recall.
+    // Keep table-ish runs together  splitting a table across chunks kills recall.
     const units: string[] = [];
     let tableBuf: string[] = [];
     const flushTable = () => {

@@ -1,5 +1,5 @@
 // Local embeddings: Xenova/all-MiniLM-L6-v2 (384-dim), zero API key, runs in-process.
-// Why local? Groq serves LLMs, not embeddings — so production RAG-on-Groq pairs a
+// Why local? Groq serves LLMs, not embeddings  so production RAG-on-Groq pairs a
 // Groq LLM with either (a) local embeddings (this file, free, private) or (b) a hosted
 // embedding API (Voyage/Cohere) when you outgrow a single Node process.
 // LEARNING.md → "Embeddings".
@@ -29,7 +29,7 @@ function getPipeline(): Promise<any> {
 }
 
 /** Deterministic offline fallback (hashed char-trigrams) so ingest/query never hard-crash
- *  when the model can't download (e.g. no network). Quality is lower — the trace flags it. */
+ *  when the model can't download (e.g. no network). Quality is lower  the trace flags it. */
 function hashEmbed(text: string, dim = ragConfig.embeddingDim): number[] {
   const vec = new Array<number>(dim).fill(0);
   const t = ` ${text.toLowerCase()} `;

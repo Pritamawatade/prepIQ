@@ -1,6 +1,6 @@
 // Agentic loop with tool calling: the LLM can search again with refined queries
 // and pull wider context around a chunk before answering. Bounded (maxSteps) and
-// evidence-constrained (tools only read retrieved chunks — no web, no shell).
+// evidence-constrained (tools only read retrieved chunks  no web, no shell).
 // LEARNING.md → "AI agents + tool calling".
 
 import { groqChat } from './groq';
@@ -21,8 +21,8 @@ interface AgentState {
 }
 
 const TOOLS_DOC = `Available tools (call exactly one per turn with JSON {"tool": "...", "args": {...}}):
-- search_docs {"query": "..."} — run another hybrid retrieval pass with a refined query.
-- finish {"draft": "..."} — stop and use this draft as the basis for the final answer.
+- search_docs {"query": "..."}  run another hybrid retrieval pass with a refined query.
+- finish {"draft": "..."}  stop and use this draft as the basis for the final answer.
 Reply with the tool JSON only, no other text.`;
 
 async function agentTurn(
@@ -52,7 +52,7 @@ async function agentTurn(
   try {
     parsed = JSON.parse(cleaned) as { tool: string; args: Record<string, any> };
   } catch {
-    // Model replied in prose — pull out the embedded {"tool": ...} object.
+    // Model replied in prose  pull out the embedded {"tool": ...} object.
     const start = cleaned.indexOf('{');
     const end = cleaned.lastIndexOf('}');
     if (start === -1 || end <= start) throw new Error('Agent turn returned no JSON tool call.');

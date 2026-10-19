@@ -1,4 +1,4 @@
-// scripts/rag-verify.ts — end-to-end RAG verification for nodejs.pdf.
+// scripts/rag-verify.ts  end-to-end RAG verification for nodejs.pdf.
 // Usage: bun scripts/rag-verify.ts
 // Steps: parse PDF → semantic chunk → embed (local MiniLM) → upsert to Qdrant
 //        → hybrid retrieve + full pipeline answerQuestion on 3 test questions.
@@ -77,7 +77,7 @@ async function main() {
   for (const q of QUESTIONS) {
     const { chunks, degraded: rd } = await hybridRetrieve(TEST_USER, [q]);
     // hybridRetrieve embeds the query itself; if ingest used hash fallback but query
-    // doesn't (or vice versa) the collection name differs — retry on the other one.
+    // doesn't (or vice versa) the collection name differs  retry on the other one.
     let hitChunks = chunks;
     if (hitChunks.length === 0) {
       const other = await hybridRetrieve(TEST_USER, [q], {}).catch(() => null);
@@ -122,7 +122,7 @@ async function main() {
     console.error(`\n[verify] RESULT: FAIL (${failures} failures)`);
     process.exit(1);
   }
-  console.log('\n[verify] RESULT: PASS — RAG is working on nodejs.pdf');
+  console.log('\n[verify] RESULT: PASS  RAG is working on nodejs.pdf');
 }
 
 main().catch((e) => {

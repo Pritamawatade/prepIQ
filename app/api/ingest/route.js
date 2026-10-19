@@ -1,4 +1,4 @@
-// app/api/ingest/route.js — single-file ingest via the shared semantic pipeline.
+// app/api/ingest/route.js  single-file ingest via the shared semantic pipeline.
 import { auth } from '@clerk/nextjs/server';
 import { ingestMetadataId } from '@/lib/rag/ingest';
 

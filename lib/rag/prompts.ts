@@ -6,7 +6,7 @@ Rules: resolve pronouns from history, keep named entities exact, keep it under 4
 never answer the question, only rewrite it.`;
 
 export function answerSystemPrompt(): string {
-  return `You are Aethena — an AI knowledge assistant for private organizational documents.
+  return `You are Aethena  an AI knowledge assistant for private organizational documents.
 
 Goal: accurate, concise, citation-backed answers from the retrieved context ONLY.
 
