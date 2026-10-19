@@ -14,15 +14,20 @@ export async function POST(request) {
   }
   const { metadataIds } = body || {};
 
-  if (!Array.isArray(metadataIds) || metadataIds.length === 0 || metadataIds.length > 10 || metadataIds.some((id) => typeof id !== 'string' || !id)) {
-    return new Response(JSON.stringify({ error: 'metadataIds must contain 1–10 non-empty strings' }), { status: 400 });
+  const isValidMetadataId = (id) =>
+    (typeof id === 'string' && id.length > 0) ||
+    (typeof id === 'number' && Number.isSafeInteger(id));
+
+  if (!Array.isArray(metadataIds) || metadataIds.length === 0 || metadataIds.length > 10 || metadataIds.some((id) => !isValidMetadataId(id))) {
+    return new Response(JSON.stringify({ error: 'metadataIds must contain 1–10 non-empty strings or safe integers' }), { status: 400 });
   }
 
   const results = [];
   const errors = [];
   let totalDocuments = 0;
 
-  for (const metadataId of metadataIds) {
+  for (const rawMetadataId of metadataIds) {
+    const metadataId = String(rawMetadataId);
     try {
       const outcome = await ingestMetadataId(metadataId, userId);
       results.push({
