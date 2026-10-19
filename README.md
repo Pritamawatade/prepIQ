@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DocWise
 
-## Getting Started
+DocWise is a document question-answering app. Upload PDF, DOCX, or CSV files, then ask questions and review answers with source citations.
 
-First, run the development server:
+## Tech Stack
+
+- **Web app:** Next.js 16 App Router, React 19, TypeScript, and Tailwind CSS 4.
+- **Authentication:** Clerk; API routes use the signed-in Clerk user ID to scope documents and chat history.
+- **File and history storage:** Supabase Storage and Postgres.
+- **Vector search:** Qdrant, running locally with Docker Compose or remotely with Qdrant Cloud.
+- **LLM:** Groq chat completions. Fast and smart model names can be configured independently.
+- **Embeddings:** `Xenova/all-MiniLM-L6-v2`, run locally through Transformers.js (384 dimensions). No embedding API key is needed; the model downloads on first use.
+- **Document processing:** LangChain loaders parse PDF, DOCX, and CSV files before semantic chunking and indexing.
+
+The RAG pipeline chunks and embeds uploads, stores vectors and source metadata in a per-user Qdrant collection, then combines dense retrieval with BM25, rank fusion, and LLM reranking to produce cited answers.
+
+## Prerequisites
+
+- Node.js 20.9 or newer and npm.
+- Docker Engine with the Docker Compose plugin.
+- A Clerk application, a Supabase project, and a Groq API key.
+
+Qdrant is the only service started by Docker Compose. Next.js, Supabase, Clerk, and Groq are configured separately.
+
+## Local Setup
+
+Install dependencies and copy the environment template:
+
+```bash
+npm install
+cp .sample.env .env.local
+```
+
+Fill in the credentials in `.env.local` using the template below. Do not commit this file. Configure Supabase as described in [Supabase Setup](#supabase-setup).
+
+Start Qdrant and verify that the container is healthy:
+
+```bash
+docker compose up -d
+docker compose ps
+```
+
+Qdrant's HTTP API is at `http://localhost:6333`; its gRPC port is `6334`. The Compose service keeps its data in the `qdrant_storage` volume.
+
+Start the web app and visit [http://localhost:3000](http://localhost:3000):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Restart the dev server after changing environment variables. Stop Qdrant with `docker compose down`; this keeps the named data volume. To also delete indexed data, use `docker compose down -v`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Example `.env.local`:
 
-## Learn More
+```dotenv
+# Groq: get a key from https://console.groq.com/keys
+GROQ_API_KEY=gsk_replace_me
+GROQ_FAST_MODEL=openai/gpt-oss-20b
+GROQ_SMART_MODEL=openai/gpt-oss-120b
 
-To learn more about Next.js, take a look at the following resources:
+# Clerk: copy the development keys from your Clerk dashboard
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_replace_me
+CLERK_SECRET_KEY=sk_test_replace_me
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Supabase: Project Settings -> API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Local Docker Qdrant
+QDRANT_URL=http://localhost:6333
+# QDRANT_API_KEY=only needed for an authenticated Qdrant deployment
+```
 
-## Deploy on Vercel
+`GROQ_FAST_MODEL` and `GROQ_SMART_MODEL` are optional; the values above are the application defaults. `QDRANT_URL` defaults to `http://localhost:6333`. Set `QDRANT_API_KEY` when connecting to an authenticated hosted instance.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The checked-in `.sample.env` also contains `NEXT_PUBLIC_CLERK_FRONTEND_API`; the app's source does not reference it directly. The Clerk publishable and secret keys are the core configuration for the current integration.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Treat `CLERK_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `GROQ_API_KEY` as server secrets. Never prefix them with `NEXT_PUBLIC_` or expose them in client code. The Supabase anon key and Clerk publishable key are designed for browser use. The primary upload API accesses Supabase from the server with the service-role key.
+
+## Supabase Setup
+
+In Supabase, create a **private Storage bucket** named `documents`. The upload route accepts up to 10 files per request and 50 MB per file. Keep the bucket private; uploads and downloads are performed by server routes using the service-role key.
+
+Create the metadata and query-history tables in the Supabase SQL editor:
+
+```sql
+create table if not exists public.documents_metadata (
+	id bigint generated by default as identity primary key,
+	user_id text not null,
+	file_name text not null,
+	path text not null,
+	uploaded_at timestamptz not null default now()
+);
+
+create index if not exists documents_metadata_user_id_idx
+	on public.documents_metadata (user_id);
+
+create table if not exists public.query_history (
+	id bigint generated by default as identity primary key,
+	user_id text not null,
+	question text not null,
+	answer text not null,
+	created_at timestamptz not null default now()
+);
+
+create index if not exists query_history_user_created_idx
+	on public.query_history (user_id, created_at desc);
+```
+
+The server uses the service-role key, so keep it server-side. The API routes filter records by the authenticated Clerk user ID; do not add public access policies for these tables or the bucket.
+
+## Useful Commands
+
+```bash
+npm run dev             # Start the development server
+npm run lint            # Run ESLint
+npm run build           # Create a production build
+docker compose up -d    # Start Qdrant
+docker compose logs -f qdrant
+```
+
+Optional RAG smoke test: with Bun installed and the required environment variables available to the process, run `bun scripts/rag-verify.ts`. The script loads variables from `.env`, indexes the included `nodejs.pdf` into a test Qdrant collection, downloads MiniLM on first use, and calls Groq for answer checks.
+
+## Troubleshooting
+
+- **Qdrant `fetch failed`:** Check `docker compose ps` and confirm `QDRANT_URL` points to the reachable Qdrant instance.
+- **Supabase errors or missing history:** Verify the project URL and keys, create the `documents` bucket and both tables above, then restart Next.js.
+- **Groq unavailable:** Check `GROQ_API_KEY` and confirm the configured model names are available to your Groq account.
+- **Slow first upload or query:** Transformers.js downloads the MiniLM embedding model on first use. If it cannot download, the app has a lower-quality hash-vector fallback; restore model access and re-ingest those documents for normal embeddings.
+
+For implementation notes and the RAG module map, see [LEARNING.md](LEARNING.md).
